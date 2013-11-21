@@ -1537,22 +1537,16 @@ bool testcase_fail1() {
 }
 
 
-bool testcase_run_main_args() {
-	bool ok=true;
-	if (!	helper_testcase_run_main_with_arguments( vector<string>{"programname"} ) ) ok=false;
 
-	// TODO: 	helper_testcase_run_main_with_arguments( vec... "programname","--complete-one");
-	// TODO: 	helper_testcase_run_main_with_arguments( vec... "programname","--complete-one","ot msg sen");
 
-	return ok;
-}
-
-bool helper_testcase_run_main_with_arguments() {
-	int argc = 1; // <--
+bool helper_testcase_run_main_with_arguments( vector<string> vecArgs) {
+	int argc = vecArgs.size(); // <--
 	typedef char * char_p;
 	char_p * argv  = new char_p[argc]; // C++ style new[]
-	argv[0] = strdup("prograname"); // C style strdup/free
-
+        for(int i = 0;i< argc;i++) {
+                strcpy(argv[i], vecArgs[i].c_str());
+                } 
+           
 	bool ok=true;
 	try {
 		main_start(argc, argv); // ... ok? TODO
@@ -1563,6 +1557,14 @@ bool helper_testcase_run_main_with_arguments() {
 	}
 	for (int i=0; i<argc; ++i) { free( argv[i] ); argv[i]=NULL; } // free!
 	delete []argv; argv=nullptr;
+
+	return ok;
+}
+bool testcase_run_main_args() {
+	bool ok=true;
+	if (!helper_testcase_run_main_with_arguments( vector<string>{"programname"} ) ) ok=false;
+        if (!helper_testcase_run_main_with_arguments( vector<string>{"programname","--complete-one"} ) ) ok=false;
+        if (!helper_testcase_run_main_with_arguments( vector<string>{"programname","--complete-one","ot msg sen"} ) ) ok=false;
 
 	return ok;
 }
