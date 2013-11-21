@@ -1550,18 +1550,18 @@ bool helper_testcase_run_main_with_arguments( vector<string> vecArgs) {
                 } 
            
 	bool ok=true;
-         cout << "Start testcase_main for arguments "<< all_argument<<endl;
+         cout << "Start testcase_main for arguments '"<< all_argument<<"'"<<endl;
 	try {
 		main_start(argc, argv); // ... ok? TODO
 	}
 	catch(const std::exception &e) {
 		ok=false;
-                cout << "End testcase_main for arguments "<< all_argument<<" is BAD"<<endl;
+                cout << "End testcase_main for arguments '"<< all_argument<<"' is BAD"<<endl;
 		cerr<<"Catched exception " << e.what() << endl;
 	}
 	for (int i=0; i<argc; ++i) { free( argv[i] ); argv[i]=NULL; } // free!
 	delete []argv; argv=nullptr;
-        cout << "End testcase_main for arguments "<< all_argument<<" is OK"<<endl;
+        cout << "End testcase_main for arguments '"<< all_argument<<"' is OK"<<endl;
 	return ok;
 }
 bool testcase_run_main_args() {
