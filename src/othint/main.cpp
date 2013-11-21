@@ -1543,29 +1543,33 @@ bool helper_testcase_run_main_with_arguments( vector<string> vecArgs) {
 	int argc = vecArgs.size(); // <--
 	typedef char * char_p;
 	char_p * argv  = new char_p[argc]; // C++ style new[]
+        string all_argument;
         for(int i = 0;i< argc;i++) {
-                strcpy(argv[i], vecArgs[i].c_str());
+                argv[i] = strdup(vecArgs[i].c_str());
+                all_argument+=vecArgs[i];
                 } 
            
 	bool ok=true;
+         cout << "Start testcase_main for arguments "<< all_argument<<endl;
 	try {
 		main_start(argc, argv); // ... ok? TODO
 	}
 	catch(const std::exception &e) {
 		ok=false;
+                cout << "End testcase_main for arguments "<< all_argument<<" is BAD"<<endl;
 		cerr<<"Catched exception " << e.what() << endl;
 	}
 	for (int i=0; i<argc; ++i) { free( argv[i] ); argv[i]=NULL; } // free!
 	delete []argv; argv=nullptr;
-
+        cout << "End testcase_main for arguments "<< all_argument<<" is OK"<<endl;
 	return ok;
 }
 bool testcase_run_main_args() {
 	bool ok=true;
-	if (!helper_testcase_run_main_with_arguments( vector<string>{"programname"} ) ) ok=false;
-        if (!helper_testcase_run_main_with_arguments( vector<string>{"programname","--complete-one"} ) ) ok=false;
+	if (!helper_testcase_run_main_with_arguments( vector<string>{"programname","--complete-one"} ) ) ok=false;
         if (!helper_testcase_run_main_with_arguments( vector<string>{"programname","--complete-one","ot msg sen"} ) ) ok=false;
-
+        if (!helper_testcase_run_main_with_arguments( vector<string>{"programname"} ) ) ok=false;
+     
 	return ok;
 }
 
